@@ -516,10 +516,9 @@ MonoBehaviour:
   - folderName: Video|Videos
     icon: VideoPlayer Icon
     color: {r: 0.5764706, g: 0.43921572, b: 0.8588236, a: 1}
-  - folderName: Assets
-    icon: 
-    color: {r: 1, g: 0.3909036, b: 0, a: 1}
   _sceneHistory:
+  - name: MainMenu
+    path: Assets/Scenes/MainMenu.unity
   - name: Combat Test
     path: Assets/Assets/Player/Scenes/Combat Test.unity
   - name: Combat Test
