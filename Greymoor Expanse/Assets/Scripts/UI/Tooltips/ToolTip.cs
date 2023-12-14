@@ -63,12 +63,6 @@ namespace Greymoor.UI.Tooltips
 
             //rectTransform.pivot = new Vector2(pivotX, pivotY);
             transform.position = pos;
-
-            if(debugMode){
-#if UNITY_EDITOR
-                UpdateUI();
-#endif
-            }
         }
     }
 }

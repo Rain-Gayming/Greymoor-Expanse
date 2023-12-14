@@ -1,0 +1,357 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Sirenix.OdinInspector;
+using UnityEngine.Audio;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.Rendering.Universal;
+using System.IO;
+using UnityEngine.SceneManagement;
+using Greymoor.UI.MenuManagement;
+
+namespace Greymoor.Game.Settings
+{
+    public class SettingsManager : MonoBehaviour
+    {
+        [BoxGroup("Menu")]
+        public MenuObject settingsMenu;
+        [BoxGroup("Menu")]
+        public Transform settingsObject;
+
+        [BoxGroup("Settings")]
+        [BoxGroup("Settings/Saving")]
+        public string savePath;
+        [BoxGroup("Settings/Saving")]
+        public SettingsSaveData saveData;
+        [BoxGroup("Settings/Saving")]
+        public SettingsSaveData defaultSettings;
+
+        [BoxGroup("Settings/Graphics")]
+        public UniversalRenderPipelineAsset pipelineAsset;
+        [BoxGroup("Settings/Graphics")]
+        public TMP_Dropdown resolutionDropdown;
+        [BoxGroup("Settings/Graphics")]
+        public TMP_Dropdown shadowDropDown;
+        [BoxGroup("Settings/Graphics")]
+        public TMP_Dropdown antiAliasingDropDown;
+        [BoxGroup("Settings/Graphics")]
+        public TMP_Dropdown fullscreendropDown;
+        Resolution[] resolutions;
+
+        [BoxGroup("Settings/Audio")]
+        public AudioMixer audioMixer;
+        [BoxGroup("Settings/Audio")]
+        public Slider masterSlider;
+        [BoxGroup("Settings/Audio")]
+        public TMP_Text masterText;
+        [BoxGroup("Settings/Audio")]
+        public Slider musicSlider;
+        [BoxGroup("Settings/Audio")]
+        public TMP_Text musicText;
+        [BoxGroup("Settings/Audio")]
+        public Slider effectsSlider;
+        [BoxGroup("Settings/Audio")]
+        public TMP_Text effectsText;
+        
+        [BoxGroup("Settings/Gameplay")]
+        public Slider sensXSlider;
+        [BoxGroup("Settings/Gameplay")]
+        public TMP_Text sensXText;
+        [BoxGroup("Settings/Gameplay")]
+        public Slider sensYSlider;
+        [BoxGroup("Settings/Gameplay")]
+        public TMP_Text sensYText;
+        [BoxGroup("Settings/Gameplay")]
+        public Toggle invertXToggle;
+        [BoxGroup("Settings/Gameplay")]
+        public Toggle invertYToggle;
+
+        void Start() 
+        {        
+            savePath = Application.persistentDataPath + "/Settings.json";
+
+            resolutionDropdown.ClearOptions();
+            List<string> options = new List<string>();
+            resolutions = Screen.resolutions;
+            int currentResolutionIndex = 0;
+            for (int i = 0; i < resolutions.Length; i++)
+            {
+                string option = resolutions[i].width + " x " + 
+                        resolutions[i].height + " @ " + Mathf.RoundToInt((float)resolutions[i].refreshRateRatio.value);
+                options.Add(option);
+                if (resolutions[i].width == Screen.currentResolution.width 
+                    && resolutions[i].height == Screen.currentResolution.height)
+                    currentResolutionIndex = i;
+            }
+            resolutionDropdown.AddOptions(options);
+            resolutionDropdown.RefreshShownValue();
+            //LoadSettings(currentResolutionIndex);
+
+            if(File.Exists(savePath) && SceneManager.GetActiveScene().name == "MainMenu"){
+                StartCoroutine(LoadCo());
+            }else if(!File.Exists(savePath) && SceneManager.GetActiveScene().name == "MainMenu"){ 
+                LoadDefaults();
+            }
+        }
+
+        public void UpdateMaster(float vol)
+        {
+            audioMixer.SetFloat("MasterVol", vol);
+            masterText.text = "Master: " + (vol + 80).ToString();
+            saveData.audioSaveData.masterVolume = vol;
+            SaveSettings();
+            
+        }
+        public void UpdateMusic(float vol)
+        {
+            audioMixer.SetFloat("MusicVol", vol);
+            musicText.text = "Music: " + (vol + 80).ToString();
+            saveData.audioSaveData.musicVolume = vol;
+            SaveSettings();
+        }
+        public void UpdateEffects(float vol)
+        {
+            audioMixer.SetFloat("EffectsVol", vol);
+            effectsText.text = "Effects: " + (vol + 80).ToString();
+            saveData.audioSaveData.effectsVolume = vol;
+            SaveSettings();
+        }
+
+        public void UpdateSensX(float val)
+        {
+            saveData.gameplaySaveData.sensitivityX = val;
+            sensXText.text = "X Sensitivity: " + val;
+            
+            SaveSettings();
+        }
+        public void UpdateSensY(float val)
+        {        
+            saveData.gameplaySaveData.sensitivityY = val;
+            sensYText.text = "Y Sensitivity: " + val;
+
+            SaveSettings();
+        }
+
+        public void UpdateInvertX(bool val)
+        {
+            saveData.gameplaySaveData.invertedX = val;
+
+            SaveSettings();
+        }
+        
+        public void UpdateInvertY(bool val)
+        {
+            saveData.gameplaySaveData.invertedY = val;
+
+            SaveSettings();
+        }
+
+        public void UpdateCameraSettings()
+        {        
+            //please for gods sake ive been trying to get this to set values for a fucking hour im about to cry omfg
+            // why wont u work u bastard of a language
+            /*if(camera != null){
+                camera.UpdateCamera();
+            }
+            if(magicCamera != null){
+                magicCamera.UpdateCamera();
+            }*/
+        }
+
+        public void SetResolution(int value)
+        {
+            Resolution resolution = resolutions[value];
+            Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+            saveData.graphicsSaveData.resolution = value;
+            SaveSettings();
+        }
+        public void UpdateAntiAliasing(int value)
+        {
+            switch (value)
+            {
+                case 0:
+                    pipelineAsset.msaaSampleCount = (int)MsaaQuality.Disabled;
+                break;    
+                case 1:
+                    pipelineAsset.msaaSampleCount = (int)MsaaQuality._2x;
+                break;    
+                case 2:
+                    pipelineAsset.msaaSampleCount = (int)MsaaQuality._4x;
+                break;    
+                case 3:
+                    pipelineAsset.msaaSampleCount = (int)MsaaQuality._8x;
+                break;    
+            }
+            saveData.graphicsSaveData.antiAliasingQuality = value;
+            SaveSettings();
+        }
+        
+        public void UpdateShadows(int value)
+        {
+            switch (value)
+            {
+                case 0:
+                    pipelineAsset.shadowDistance = 0;
+                break;    
+                case 1:
+                    pipelineAsset.shadowDistance = 150;
+                break;    
+                case 2:
+                    pipelineAsset.shadowDistance = 200;
+                break;    
+                case 3:
+                    pipelineAsset.shadowDistance = 250;
+                break;    
+            }
+            saveData.graphicsSaveData.shadowQuality = value;
+            SaveSettings();
+        }
+        public void UpdateTextures(int value)
+        {
+            switch (value)
+            {
+                case 0:
+                    
+                break;    
+                case 1:
+                    pipelineAsset.shadowDistance = 150;
+                break;    
+                case 2:
+                    pipelineAsset.shadowDistance = 200;
+                break;    
+                case 3:
+                    pipelineAsset.shadowDistance = 250;
+                break;    
+            }
+            saveData.graphicsSaveData.texureQuality = value;
+            SaveSettings();
+        }
+
+        public void UpdateFullscreen(int value)
+        {
+            switch (value)
+            {
+                case 0:
+                    Screen.fullScreenMode = FullScreenMode.Windowed;
+                break;
+                case 1:
+                    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+                break;
+                case 2:
+                    Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+                break;
+            }
+            saveData.graphicsSaveData.fullscreen = value;
+            SaveSettings();
+        }
+
+        public void SaveSettings()
+        {
+            string jsonString = JsonUtility.ToJson(saveData, true);
+            File.WriteAllText(savePath, jsonString);
+        }
+
+        public IEnumerator LoadCo()
+        {
+            settingsObject.position = new Vector3(10000, 10000, 0);
+            settingsMenu.Toggle();
+            LoadSettings();
+            yield return new WaitForEndOfFrame();
+            settingsMenu.Toggle();
+            settingsObject.localPosition = new Vector3(0, 0, 0);
+        }
+
+        public void LoadSettings()
+        {
+            string fileContents = File.ReadAllText(savePath);
+
+            SettingsSaveData newSaveData = JsonUtility.FromJson<SettingsSaveData>(fileContents);
+
+            fullscreendropDown.value = newSaveData.graphicsSaveData.fullscreen;
+            UpdateFullscreen(fullscreendropDown.value);
+            shadowDropDown.value = newSaveData.graphicsSaveData.shadowQuality;
+            UpdateShadows(shadowDropDown.value);
+            antiAliasingDropDown.value = newSaveData.graphicsSaveData.antiAliasingQuality;
+            UpdateAntiAliasing(antiAliasingDropDown.value);
+            resolutionDropdown.value = newSaveData.graphicsSaveData.resolution;
+            SetResolution(resolutionDropdown.value);
+            
+            masterSlider.value = newSaveData.audioSaveData.masterVolume;
+            UpdateMaster(masterSlider.value);
+            musicSlider.value = newSaveData.audioSaveData.musicVolume;
+            UpdateMusic(musicSlider.value);
+            effectsSlider.value = newSaveData.audioSaveData.effectsVolume;
+            UpdateEffects(effectsSlider.value);
+
+            sensYSlider.value = newSaveData.gameplaySaveData.sensitivityY;
+            UpdateSensY(sensYSlider.value);
+            sensXSlider.value = newSaveData.gameplaySaveData.sensitivityX;
+            UpdateSensX(sensXSlider.value);
+            invertYToggle.isOn = newSaveData.gameplaySaveData.invertedY;
+            UpdateInvertY(invertYToggle.isOn);
+            invertXToggle.isOn = newSaveData.gameplaySaveData.invertedX;
+            UpdateInvertX(invertXToggle.isOn);
+        }
+
+        public void LoadDefaults()
+        {
+            fullscreendropDown.value = defaultSettings.graphicsSaveData.fullscreen;
+            UpdateFullscreen(fullscreendropDown.value);
+            shadowDropDown.value = defaultSettings.graphicsSaveData.shadowQuality;
+            UpdateShadows(shadowDropDown.value);
+            antiAliasingDropDown.value = defaultSettings.graphicsSaveData.antiAliasingQuality;
+            UpdateAntiAliasing(antiAliasingDropDown.value);
+            resolutionDropdown.value = defaultSettings.graphicsSaveData.resolution;
+            SetResolution(resolutionDropdown.value);
+            
+            masterSlider.value = defaultSettings.audioSaveData.masterVolume;
+            UpdateMaster(masterSlider.value);
+            musicSlider.value = defaultSettings.audioSaveData.musicVolume;
+            UpdateMusic(musicSlider.value);
+            effectsSlider.value = defaultSettings.audioSaveData.effectsVolume;
+            UpdateEffects(effectsSlider.value);
+
+            sensYSlider.value = defaultSettings.gameplaySaveData.sensitivityY;
+            UpdateSensY(sensYSlider.value);
+            sensXSlider.value = defaultSettings.gameplaySaveData.sensitivityX;
+            UpdateSensX(sensXSlider.value);
+            invertYToggle.isOn = defaultSettings.gameplaySaveData.invertedY;
+            UpdateInvertY(invertYToggle.isOn);
+            invertXToggle.isOn = defaultSettings.gameplaySaveData.invertedX;
+            UpdateInvertX(invertXToggle.isOn); 
+        }
+    }
+}
+[System.Serializable]
+public class SettingsSaveData
+{
+    public GraphicsSaveData graphicsSaveData;
+    public AudioSaveData audioSaveData;
+    public GameplaySaveData gameplaySaveData;
+}
+[System.Serializable]
+public class GraphicsSaveData
+{
+    public int texureQuality;
+    public int shadowQuality;
+    public int antiAliasingQuality;
+    public int resolution;
+    public int fullscreen;
+}
+[System.Serializable]
+public class AudioSaveData
+{
+    public float masterVolume;
+    public float effectsVolume;
+    public float musicVolume;
+}
+[System.Serializable]
+public class GameplaySaveData
+{
+    public bool invertedX;
+    public bool invertedY;
+    public float sensitivityX;
+    public float sensitivityY;
+}
+
