@@ -517,6 +517,12 @@ MonoBehaviour:
     icon: VideoPlayer Icon
     color: {r: 0.5764706, g: 0.43921572, b: 0.8588236, a: 1}
   _sceneHistory:
+  - name: DevScene
+    path: Assets/Scenes/DevScene.unity
+  - name: Sandbox
+    path: Assets/Scenes/Sandbox.unity
+  - name: Greymoor
+    path: Assets/Scenes/Greymoor.unity
   - name: MainMenu
     path: Assets/Scenes/MainMenu.unity
   - name: Combat Test

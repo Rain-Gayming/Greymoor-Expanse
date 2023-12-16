@@ -5441,6 +5441,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3074deeedeb1ef4ea4168afab81015a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  worldButtonPrefab: {fileID: 7579232514050481299, guid: 981ccd1644c61df49a61b68832ec2589,
+    type: 3}
+  worldButtonPoint: {fileID: 969464652}
   worldType: 0
   worldTypeText: {fileID: 684533203}
   worldNameInput: {fileID: 1285177318}

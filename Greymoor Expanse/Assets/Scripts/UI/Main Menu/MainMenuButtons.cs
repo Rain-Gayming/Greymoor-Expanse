@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Greymoor.Saving.World;
 using Greymoor.World.Generation;
+using HarmonyLib;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -11,7 +13,15 @@ using UnityEngine;
 namespace Greymoor.UI.MainMenu
 {
     public class MainMenuButtons : MonoBehaviour
-    {
+    {    
+        string[] paths;
+        List<string> directories;
+
+        [BoxGroup("Load Character")]
+        public GameObject worldButtonPrefab;    
+        [BoxGroup("Load Character")]
+        public Transform worldButtonPoint;
+
         [BoxGroup("World Generation")]
         public EWorldType worldType;
         [BoxGroup("World Generation")]
@@ -28,6 +38,27 @@ namespace Greymoor.UI.MainMenu
             wt = wt.Insert(0, tmp);
 
             worldTypeText.text = wt;
+
+            DirectoryInfo info = new DirectoryInfo(Application.persistentDataPath);
+            info.GetDirectories();
+            
+
+            for (int i = 0; i < directories.Count; i++)
+            {
+                GameObject newButton = Instantiate(worldButtonPrefab);
+                newButton.transform.SetParent(worldButtonPoint);
+
+                string path = Application.persistentDataPath + directories[i] + "World.json";
+                print(path);
+
+                string fileContents = File.ReadAllText(path);
+
+                WorldSave result = JsonUtility.FromJson<WorldSave>(fileContents);
+
+
+                newButton.GetComponent<LoadCharacterButton>().worldSave = result;
+                newButton.transform.localScale = Vector3.one; 
+            }
         }
 
         public void SwapWorldType()
@@ -49,7 +80,6 @@ namespace Greymoor.UI.MainMenu
 
         public void CreateWorld()
         {
-
             Directory.CreateDirectory(Application.persistentDataPath + "/" + worldNameInput.text);
             string worldSavePath = Application.persistentDataPath + "/" + worldNameInput.text + "/World.json";
             

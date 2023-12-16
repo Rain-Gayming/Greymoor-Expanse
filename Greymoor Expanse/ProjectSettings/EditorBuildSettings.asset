@@ -8,4 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Scenes/Sandbox.unity
+    guid: 7b6b7dbfa2c61af47b41ee83d629ca92
+  - enabled: 1
+    path: Assets/Scenes/Greymoor.unity
+    guid: e5acbbcc54f096b48a3c60af4a8d1175
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: febcccd73acc596418bfc66415de3594,
+      type: 2}
