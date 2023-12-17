@@ -55,6 +55,7 @@ namespace Greymoor.Player.Movement
             moveDirection = cameraObject.forward * inputHandler.playerMovement.y;
             moveDirection += cameraObject.right * inputHandler.playerMovement.x;
             moveDirection.Normalize();
+            moveDirection.y = 0;
 
             float cms = currentMovementSpeed;
             moveDirection *= cms;
@@ -62,7 +63,7 @@ namespace Greymoor.Player.Movement
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, nomralVector);
             rb.velocity = projectedVelocity;
 
-            animationHandler.UpdateAnimatorValues(inputHandler.playerMovement.y, 0);
+            animationHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0);
         }
 
         public void HandleRotation(float delta)
