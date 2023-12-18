@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine.UI;
 
-namespace Greymoor.UI.Tooltips
+namespace RainGayming.UI.Tooltips
 {
     public class ToolTip : MonoBehaviour
     {

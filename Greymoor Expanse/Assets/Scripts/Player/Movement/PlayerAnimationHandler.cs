@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Greymoor.Player.Movement
+namespace RainGayming.Player.Movement
 {
     public class PlayerAnimationHandler : MonoBehaviour
     {

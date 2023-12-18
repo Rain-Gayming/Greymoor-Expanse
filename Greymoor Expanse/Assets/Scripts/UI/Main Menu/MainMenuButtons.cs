@@ -10,7 +10,7 @@ using TMPro;
 using UnityEngine;
 
 
-namespace Greymoor.UI.MainMenu
+namespace RainGayming.UI.MainMenu
 {
     public class MainMenuButtons : MonoBehaviour
     {    

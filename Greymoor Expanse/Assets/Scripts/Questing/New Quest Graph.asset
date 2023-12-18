@@ -1,0 +1,236 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4248492193619995178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80c2ca43498d87948839d92e4bae26a2, type: 3}
+  m_Name: Quest Segment
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 584, y: -8}
+  ports:
+    keys:
+    - input
+    - nextSteps
+    - nextSteps 0
+    values:
+    - _fieldName: input
+      _node: {fileID: -4248492193619995178}
+      _typeQualifiedName: RainGayming.Quests.connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: nextSteps 0
+        node: {fileID: 1731506349740041412}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: nextSteps
+      _node: {fileID: -4248492193619995178}
+      _typeQualifiedName: System.Collections.Generic.List`1[[RainGayming.Quests.QuestStep,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: nextSteps 0
+      _node: {fileID: -4248492193619995178}
+      _typeQualifiedName: RainGayming.Quests.QuestStep, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 8457518384384863821}
+        reroutePoints: []
+      - fieldName: input
+        node: {fileID: 5760955026049044498}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  segmentName: 
+  nextSteps:
+  - stepName: 
+    isCombat: 0
+    amount: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94dc8dc215daf084ea9c19d792341879, type: 3}
+  m_Name: New Quest Graph
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: -4248492193619995178}
+  - {fileID: 5760955026049044498}
+  - {fileID: 8457518384384863821}
+  - {fileID: 1731506349740041412}
+--- !u!114 &1731506349740041412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80c2ca43498d87948839d92e4bae26a2, type: 3}
+  m_Name: Quest Segment
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 232, y: -56}
+  ports:
+    keys:
+    - input
+    - nextSteps
+    - nextSteps 0
+    - nextSteps 1
+    values:
+    - _fieldName: input
+      _node: {fileID: 1731506349740041412}
+      _typeQualifiedName: RainGayming.Quests.connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: nextSteps
+      _node: {fileID: 1731506349740041412}
+      _typeQualifiedName: System.Collections.Generic.List`1[[RainGayming.Quests.QuestStep,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: nextSteps 0
+      _node: {fileID: 1731506349740041412}
+      _typeQualifiedName: RainGayming.Quests.QuestStep, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: -4248492193619995178}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: nextSteps 1
+      _node: {fileID: 1731506349740041412}
+      _typeQualifiedName: RainGayming.Quests.QuestStep, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  segmentName: awdwad
+  nextSteps:
+  - stepName: 
+    isCombat: 1
+    amount: 0
+  - stepName: 
+    isCombat: 1
+    amount: 0
+--- !u!114 &5760955026049044498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80c2ca43498d87948839d92e4bae26a2, type: 3}
+  m_Name: Quest Segment
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 968, y: -56}
+  ports:
+    keys:
+    - input
+    - nextSteps
+    values:
+    - _fieldName: input
+      _node: {fileID: 5760955026049044498}
+      _typeQualifiedName: RainGayming.Quests.connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: nextSteps 0
+        node: {fileID: -4248492193619995178}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: nextSteps
+      _node: {fileID: 5760955026049044498}
+      _typeQualifiedName: System.Collections.Generic.List`1[[RainGayming.Quests.QuestStep,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  segmentName: 
+  nextSteps: []
+--- !u!114 &8457518384384863821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80c2ca43498d87948839d92e4bae26a2, type: 3}
+  m_Name: Quest Segment
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 968, y: 152}
+  ports:
+    keys:
+    - input
+    - nextSteps
+    values:
+    - _fieldName: input
+      _node: {fileID: 8457518384384863821}
+      _typeQualifiedName: RainGayming.Quests.connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: nextSteps 0
+        node: {fileID: -4248492193619995178}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: nextSteps
+      _node: {fileID: 8457518384384863821}
+      _typeQualifiedName: System.Collections.Generic.List`1[[RainGayming.Quests.QuestStep,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  segmentName: 
+  nextSteps: []

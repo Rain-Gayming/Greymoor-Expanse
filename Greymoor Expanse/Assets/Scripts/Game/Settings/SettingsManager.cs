@@ -8,9 +8,9 @@ using TMPro;
 using UnityEngine.Rendering.Universal;
 using System.IO;
 using UnityEngine.SceneManagement;
-using Greymoor.UI.MenuManagement;
+using RainGayming.UI.MenuManagement;
 
-namespace Greymoor.Game.Settings
+namespace RainGayming.Game.Settings
 {
     public class SettingsManager : MonoBehaviour
     {

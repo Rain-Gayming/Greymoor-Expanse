@@ -1,9 +1,9 @@
 using System.Security.Cryptography;
-using Greymoor.Player.Inputs;
+using RainGayming.Player.Inputs;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Greymoor.Player.Movement
+namespace RainGayming.Player.Movement
 {
     public class PlayerLocomotion : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Greymoor.UI.Genera
+namespace RainGayming.UI.General
 {
     public class ExitGame : MonoBehaviour
     {

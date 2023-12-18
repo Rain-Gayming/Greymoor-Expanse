@@ -1,9 +1,9 @@
-using Greymoor.Player.Inputs;
+using RainGayming.Player.Inputs;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Greymoor.Player.Camera
+namespace RainGayming.Player.Camera
 {
     public class CameraHandler : MonoBehaviour
     {

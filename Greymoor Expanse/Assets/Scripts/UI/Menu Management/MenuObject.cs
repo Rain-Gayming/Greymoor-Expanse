@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-namespace Greymoor.UI.MenuManagement
+namespace RainGayming.UI.MenuManagement
 {
     public class MenuObject : MonoBehaviour
     {

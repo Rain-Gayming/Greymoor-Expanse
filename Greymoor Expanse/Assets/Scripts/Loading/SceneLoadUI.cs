@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Greymoor.Loading.Scene
+namespace RainGayming.Loading.Scene
 {
     public class SceneLoadUI : MonoBehaviour
     {

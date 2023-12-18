@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Greymoor.Player.Inputs
+namespace RainGayming.Player.Inputs
 {
     public class InputHandler : MonoBehaviour
     {

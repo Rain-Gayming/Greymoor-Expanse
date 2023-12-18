@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Greymoor.UI.Tooltips
+namespace RainGayming.UI.Tooltips
 {
     public class ToolTipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
