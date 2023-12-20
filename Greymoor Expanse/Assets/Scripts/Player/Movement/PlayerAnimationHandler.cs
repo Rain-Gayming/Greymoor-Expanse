@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
+using Mono.Cecil;
+using RainGayming.Player.Inputs;
 using Sirenix.OdinInspector;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace RainGayming.Player.Movement
@@ -9,6 +13,12 @@ namespace RainGayming.Player.Movement
     {
         [BoxGroup("References")]
         public Animator anim;
+        [BoxGroup("References")]
+        public InputHandler inputHandler;
+        [BoxGroup("References")]
+        public PlayerLocomotion playerLocomotion;
+        [BoxGroup("References")]
+        public Transform hipsTransform;
 
         [BoxGroup("Values")]
         public bool canRotate;
@@ -47,9 +57,22 @@ namespace RainGayming.Player.Movement
             anim.SetFloat("Horizontal", h, 0.1f, Time.deltaTime);
         }
 
+        public void PlayTargetAnimation(string targetName, bool isInteracting)
+        {
+            //anim.applyRootMotion = isInteracting;
+            anim.SetBool("isInteracting", isInteracting);
+            anim.CrossFade(targetName, 0.2f);
+        }
         public void SetRotate(bool value)
         {
             canRotate = value;
+        }
+
+        public void OnAnimatorMove()
+        {
+            if(!inputHandler.isInteracting){
+                return;
+            }
         }
     }
 }

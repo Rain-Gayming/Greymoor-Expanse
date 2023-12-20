@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using RainGayming.Player.Inputs;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -30,9 +29,11 @@ namespace RainGayming.Player.Movement
         [BoxGroup("Movement Info/Movement")]
         public float sprintSpeed;
         [BoxGroup("Movement Info")]
+        public float rollDistance;
+        [BoxGroup("Movement Info")]
         public float rotationSpeed;
 
-        Vector3 nomralVector;
+        Vector3 normalVector;
         Vector3 targetPosition;
         Vector3 moveDirection;
 
@@ -44,6 +45,7 @@ namespace RainGayming.Player.Movement
         public void Update()
         {
             HandleMovement(Time.deltaTime);
+            HandleRollAndSprinting(Time.deltaTime);
 
             if(animationHandler.canRotate){
                 HandleRotation(Time.deltaTime);
@@ -60,11 +62,38 @@ namespace RainGayming.Player.Movement
             float cms = currentMovementSpeed;
             moveDirection *= cms;
 
-            Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, nomralVector);
+            Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
             rb.velocity = projectedVelocity;
 
             animationHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0);
         }
+
+        public void HandleRollAndSprinting(float delta)
+        {
+            if(animationHandler.anim.GetBool("isInteracting")){
+                return;
+            }
+
+            if(inputHandler.rollFlag){
+                moveDirection = cameraObject.forward * inputHandler.playerMovement.y;
+                moveDirection += cameraObject.right * inputHandler.playerMovement.x;
+
+                if(inputHandler.moveAmount > 0){
+                    animationHandler.PlayTargetAnimation("Rolling", true);
+                    moveDirection.y = 0;
+
+                    rb.velocity = transform.forward * rollDistance;
+                    
+                    Quaternion rollRotation = Quaternion.LookRotation(moveDirection);
+                    myTransform.rotation = rollRotation;
+                }else{
+                    //Currently no backstep anim
+                    
+                    //animationHandler.PlayTargetAnimation("Backstep", true);
+                }
+            }
+        }
+
 
         public void HandleRotation(float delta)
         {

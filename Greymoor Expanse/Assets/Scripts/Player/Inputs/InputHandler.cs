@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using Tayx.Graphy.Advanced;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -14,6 +15,13 @@ namespace RainGayming.Player.Inputs
         public Vector2 playerMovement;
         [BoxGroup("Movement")]
         public float moveAmount;
+
+        [BoxGroup("Actions")]
+        public bool bInput;
+        [BoxGroup("Actions")]
+        public bool rollFlag;
+        [BoxGroup("Actions")]
+        public bool isInteracting;
 
         [BoxGroup("Camera")]
         public Vector2 mouseMove;
@@ -30,6 +38,18 @@ namespace RainGayming.Player.Inputs
             moveAmount = Mathf.Clamp01(Mathf.Abs(playerMovement.x) + Mathf.Abs(playerMovement.y));
             
             mouseMove = inputActions.Movement.Camera.ReadValue<Vector2>();
+
+            inputActions.Actions.Roll.performed += _ => bInput = true;
+            inputActions.Actions.Roll.canceled += _ => bInput = false;
+
+            HandleRollingInput(Time.deltaTime);
+        }
+
+        public void HandleRollingInput(float delta)
+        {
+            if(bInput){
+                rollFlag = true;
+            }
         }
 
         public void OnDisable() 
