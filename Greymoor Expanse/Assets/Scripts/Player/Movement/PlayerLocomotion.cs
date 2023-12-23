@@ -28,8 +28,23 @@ namespace RainGayming.Player.Movement
         public float crouchSpeed;
         [BoxGroup("Movement Info/Movement")]
         public float sprintSpeed;
-        [BoxGroup("Movement Info")]
+        [BoxGroup("Movement Info/Rolling")]
         public float rollDistance;
+        
+        [BoxGroup("Movement Info/Airial")]
+        public float gravity = -9.81f;
+        [BoxGroup("Movement Info/Airial")]
+        public bool isGrounded;
+        [BoxGroup("Movement Info/Airial")]
+        public float groundArea;
+        [BoxGroup("Movement Info/Airial")]
+        public Transform groundPoint;
+        [BoxGroup("Movement Info/Airial")]
+        public float jumpVelocity;
+        [BoxGroup("Movement Info/Airial")]
+        public LayerMask jumpableMask;
+        [BoxGroup("Movement Info/Airial")]
+        public float airDrag;
         [BoxGroup("Movement Info")]
         public float rotationSpeed;
 
@@ -44,20 +59,42 @@ namespace RainGayming.Player.Movement
 
         public void Update()
         {
+            isGrounded = Physics.CheckSphere(groundPoint.position, groundArea, jumpableMask);
+
+            if(isGrounded){
+                rb.drag = 0;
+            }else{
+                rb.drag = airDrag;
+                
+                Vector3 gravVelocity = new Vector3(rb.velocity.x, -gravity, rb.velocity.z);
+                rb.velocity = gravVelocity;
+            }
+        
             HandleMovement(Time.deltaTime);
             HandleRollAndSprinting(Time.deltaTime);
 
-            if(animationHandler.canRotate){
+
+            if(inputHandler.jump && isGrounded){
+                inputHandler.jump = false;
+                HandleJump(Time.deltaTime);
+            }
+
+            if(animationHandler.canRotate && !inputHandler.isInteracting){
                 HandleRotation(Time.deltaTime);
             }
         }
 
         public void HandleMovement(float delta)
-        {            
-            moveDirection = cameraObject.forward * inputHandler.playerMovement.y;
-            moveDirection += cameraObject.right * inputHandler.playerMovement.x;
+        {
+            if(!inputHandler.isInteracting){
+                moveDirection = cameraObject.forward * inputHandler.playerMovement.y;
+                moveDirection += cameraObject.right * inputHandler.playerMovement.x;
+            }
             moveDirection.Normalize();
-            moveDirection.y = 0;
+
+            if(isGrounded){
+                moveDirection.y = 0;
+            }
 
             float cms = currentMovementSpeed;
             moveDirection *= cms;
@@ -66,6 +103,11 @@ namespace RainGayming.Player.Movement
             rb.velocity = projectedVelocity;
 
             animationHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0);
+        }
+
+        public void HandleJump(float delta)
+        {
+            rb.AddForce(transform.up * jumpVelocity, ForceMode.Impulse);
         }
 
         public void HandleRollAndSprinting(float delta)

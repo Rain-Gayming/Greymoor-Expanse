@@ -81,8 +81,12 @@ namespace RainGayming.Player.Camera
             }
         }
 
+        [Button]
         public void FollowTarget(float delta)
         {
+            if(delta == 0){
+                delta = Time.deltaTime;
+            }
             Vector3 targetPos = Vector3.SmoothDamp(myTransform.position, targetTransform.position, 
                 ref cameraFollowVelocity, delta / followSpeed);
             myTransform.position = targetPos;
@@ -124,9 +128,9 @@ namespace RainGayming.Player.Camera
             Vector3 direction = cameraTransform.position - cameraPivotTransform.position;
             direction.Normalize();
 
-            if(Physics.SphereCast(cameraPivotTransform.position, cameraSphereRadius, direction, out hit, Mathf.Abs(targetPosition), ignoreLayers)){
+            if(Physics.SphereCast(cameraPivotTransform.position, cameraSphereRadius, direction, out hit, Mathf.Abs(targetPosition), ~ignoreLayers)){
                 float dis = Vector3.Distance(cameraPivotTransform.position, hit.point);
-                targetPosition = (dis - cameraCollisionOffSet);
+                targetPosition = -(dis - cameraCollisionOffSet);
             }
 
             if(Mathf.Abs(targetPosition) < minimumCollisionOffset){

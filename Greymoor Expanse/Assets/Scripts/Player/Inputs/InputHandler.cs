@@ -15,6 +15,8 @@ namespace RainGayming.Player.Inputs
         public Vector2 playerMovement;
         [BoxGroup("Movement")]
         public float moveAmount;
+        [BoxGroup("Movement")]
+        public bool jump;
 
         [BoxGroup("Actions")]
         public bool bInput;
@@ -34,13 +36,21 @@ namespace RainGayming.Player.Inputs
 
         public void Update()
         {
-            playerMovement = inputActions.Movement.Move.ReadValue<Vector2>();
-            moveAmount = Mathf.Clamp01(Mathf.Abs(playerMovement.x) + Mathf.Abs(playerMovement.y));
+            if(!isInteracting){
+                playerMovement = inputActions.Movement.Move.ReadValue<Vector2>();
+                moveAmount = Mathf.Clamp01(Mathf.Abs(playerMovement.x) + Mathf.Abs(playerMovement.y));
+            }else{
+                playerMovement = Vector3.zero;
+                moveAmount = 0;
+            }
             
             mouseMove = inputActions.Movement.Camera.ReadValue<Vector2>();
 
             inputActions.Actions.Roll.performed += _ => bInput = true;
             inputActions.Actions.Roll.canceled += _ => bInput = false;
+            
+            inputActions.Movement.Jump.performed += _ => jump = true;
+            inputActions.Movement.Jump.canceled += _ => jump = false;
 
             HandleRollingInput(Time.deltaTime);
         }
